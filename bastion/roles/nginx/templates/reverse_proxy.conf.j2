@@ -1,0 +1,6 @@
+stream {
+	server {
+		listen 443;
+			proxy_pass {{ ipify_public_ip }}:443;
+	}
+}

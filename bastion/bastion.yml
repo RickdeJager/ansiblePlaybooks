@@ -1,0 +1,20 @@
+---
+# This playbook deploys a bastion ubuntu vm
+
+- name: Setup users and keys
+  hosts: root-bastion
+  remote_user: root
+  gather_facts: no              # We can't gather facts without python
+
+  roles:
+    - prereq
+
+- name: Install common packages, setup nginx reverse proxy, ddns
+  hosts: ansible-bastion
+  gather_facts: no              # We can't gather facts without python
+  remote_user: ansible
+  become: yes
+
+  roles:
+    - common
+    - nginx

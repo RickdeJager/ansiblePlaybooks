@@ -1,0 +1,3 @@
+# The host file might contain IP addresses and is generated from a template anyways
+hosts
+*.retry

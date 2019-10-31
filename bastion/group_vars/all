@@ -1,0 +1,5 @@
+---
+#ansible_key: /home/rick/.ssh/id_rsa.pub
+#mgmt_key: /home/rick/bastion/mgmt_key/id_rsa.pub
+ansible_key: "{{ lookup('file', '/home/rick/.ssh/id_rsa.pub') }}"
+mgmt_key: "{{ lookup('file', '/home/rick/bastion/mgmt_key/id_rsa.pub') }}"

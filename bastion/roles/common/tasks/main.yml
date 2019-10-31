@@ -1,0 +1,35 @@
+---
+- name: Update and upgrade apt packages
+  apt:
+    upgrade: yes
+    update_cache: yes
+    cache_valid_time: 86400 #One day
+
+- name: install Python3, fail2ban
+  apt:
+    name: "{{ packages }}"
+    state: present
+  vars:
+    packages:
+      - python3
+      - fail2ban
+
+- name: Get own IP
+  become: no
+  ipify_facts:
+  connection: local
+
+- name: Make sure fail2ban contains an exception for this ip
+  lineinfile:
+    dest: /etc/fail2ban/jail.conf
+    state: present
+    regexp: '^ignoreip'
+    line: 'ignoreip = 127.0.0.1 {{ ipify_public_ip }}'
+  register: whitelist
+
+- name: Restart Fail2Ban if needed
+  service:
+    name: fail2ban
+    state: restarted
+  when: whitelist.changed
+

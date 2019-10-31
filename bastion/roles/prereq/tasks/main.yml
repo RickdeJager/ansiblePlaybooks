@@ -1,0 +1,38 @@
+---
+# First setup up 2 accounts to use; ansible and mgmt
+
+- name: Ensure group "wheel" exists
+  group:
+    name: wheel
+    state: present
+
+- name: Allow 'wheel' group to have passwordless sudo
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    regexp: '^%wheel'
+    line: '%wheel ALL=(ALL) NOPASSWD: ALL'
+    validate: 'visudo -cf %s'
+
+- name: Make sure we have users for ansible and mgmt
+  user:
+    name: "{{ item }}"
+    state: present
+    shell: /bin/bash
+    groups: "wheel"
+  loop:
+    - ansible
+    - mgmt
+
+- name: Set up authorized keys for ansible
+  authorized_key:
+    user: ansible 
+    key: "{{ ansible_key }}"
+
+- name: Set up authorized keys for mgmt
+  authorized_key:
+    user: mgmt 
+    key: "{{ mgmt_key }}"
+
+# This is all we really need to do from root, 
+# the rest can be done from the service account.

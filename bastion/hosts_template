@@ -1,0 +1,8 @@
+[bastion]
+root-bastion ansible_user=root  ansible_ssh_private_key_file=/home/rick/bastion/root_key/id_rsa
+
+ansible-bastion ansible_user=ansible  ansible_ssh_private_key_file=/home/rick/.ssh/id_rsa
+
+[bastion:vars]
+ansible_python_interpreter=/usr/bin/python3
+ansible_host=<<IP>>
